@@ -22,25 +22,25 @@ erDiagram
     COMPANY {
         string company_name PK "회사명"
         string industry_field "산업분야"
-        number target_applicants "희망 구직자 수"
+        int target_applicants "희망 구직자 수"
         date apply_start_date "신청 시작일"
         date apply_end_date "신청 종료일"
-        number starting_salary "연간 초봉"
+        int starting_salary "연간 초봉"
     }
     JOB_SEEKER {
-        string ssn PK "주민등록번호"
+        int ssn PK "주민등록번호"
         string major_field "전공 분야"
-        number gpa "학점"
-        number toeic_score "토익 L&R 총점"
-        number desired_salary "희망 연봉"
+        int garde "학점"
+        int toeic_score "토익"
+        int desired_salary "희망 연봉"
         string university_name FK "필수 출신 대학"
     }
     JOB_SEEKER_LICENSE {
-        string ssn PK, FK "구직자 주민등록번호"
+        int ssn PK, FK "구직자 주민등록번호"
         string license_name PK "자격증 종류명"
     }
     APPLICATION {
-        string ssn PK, FK "구직자 주민등록번호"
+        int ssn PK, FK "구직자 주민등록번호"
         string company_name PK, FK "지원 기업명"
         date apply_date "지원 일자"
     }
@@ -72,7 +72,7 @@ erDiagram
 8. 기사의 운행 기록은 해당 날짜에 노선이 배정된 차량에 대해서만 등록할 수 있으며, 운행 노선은 그날 차량에 배정된 노선과 같다고 가정한다.
 9. 차량 배정과 기사 운행은 일 단위로 관리하며, 배정일과 운행일의 시간 부분은 00:00:00으로 통일한다.
 10. 회사 간 차량 지원과 기사 파견을 허용한다고 가정한다. 따라서 차량 소유 회사, 노선 관리 회사 및 기사 소속 회사가 반드시 같을 필요는 없다.
-11. 배차 간격은 분 단위의 양의 정수, 근무 연수는 완료한 근무 연수를 나타내는 0 이상의 정수로 관리한다. 연봉은 원 단위의 비음수 값으로, 출시연도는 네 자리 연도로 저장한다.
+11. 배차 간격은 분 단위의 양의 정수, 근무 연수는 완료한 근무 연수를 나타내는 0 이상의 정수로 관리한다. 출시연도는 네 자리 연도로 저장한다.
 12. 회사·차량·기사의 정보는 현재 상태를 기준으로 관리하며, 회사 소속 및 차량 소유 관계의 변경 이력은 관리하지 않는다.
 13. 식별자와 소속·배정 관계에 필요한 정보, 기사 이름, 정류장 이름, 날짜, 정류장 순서, 구간 소요 시간, 배차 간격 및 노선 유형은 필수로 관리한다. 그 밖의 일반 속성은 미등록 상태를 허용한다. 다른 기록에서 참조 중인 정보는 삭제할 수 없다고 가정한다.
 
@@ -85,8 +85,8 @@ erDiagram
         string ceo_name "대표이사 이름"
     }
     BUS_ROUTE {
-        string route_number PK "버스 번호 - 방향별 경로 식별"
-        number dispatch_interval "배차 간격 - 분"
+        int route_number PK "버스 번호"
+        int dispatch_interval "배차 간격"
         string route_type "일반 또는 직행"
         string company_name FK "관리 회사"
     }
@@ -96,32 +96,32 @@ erDiagram
     }
     ROUTE_STOP {
         string route_number PK, FK "노선번호"
-        number stop_sequence PK "정류장 순서"
-        number stop_id FK "정류장 식별자"
-        number next_stop_travel_time "다음 정류장까지 분 - 종점은 0"
+        int stop_sequence PK "정류장 순서"
+        int stop_id FK "정류장 식별자"
+        int next_stop_travel_time "다음 정류장까지 분 - 종점은 0"
     }
     BUS {
-        string vehicle_number PK "차량번호"
+        int vehicle_number PK "차량번호"
         string model "차량 모델"
-        number release_year "출시연도"
+        date release_year "출시연도"
         string company_name FK "소유 회사"
     }
     BUS_ASSIGNMENT {
-        string vehicle_number PK, FK "차량번호"
+        int vehicle_number PK, FK "차량번호"
         date assignment_date PK "할당 일자"
         string route_number FK "할당 노선"
     }
     DRIVER {
-        string ssn PK "주민등록번호"
+        int ssn PK "주민등록번호"
         string driver_name "기사 이름"
-        number years_of_service "근무 연수"
-        number salary "연봉 - 원"
+        int years_of_service "근무 연수"
+        int salary "연봉"
         string company_name FK "소속 회사"
     }
     DRIVER_OPERATION {
-        string ssn PK, FK "기사 주민등록번호"
+        int ssn PK, FK "기사 주민등록번호"
         date operation_date PK, FK "운행 일자 - 배정일 참조"
-        string vehicle_number FK "운행 차량번호"
+        int vehicle_number FK "운행 차량번호"
     }
     BUS_COMPANY ||..o{ BUS_ROUTE : "관리"
     BUS_COMPANY ||..o{ BUS : "소유"
